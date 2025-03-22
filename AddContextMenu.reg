@@ -1,0 +1,17 @@
+Windows Registry Editor Version 5.00
+
+; Add "Show Quick Access Popup" to all file types
+[HKEY_CLASSES_ROOT\*\shell\ShowQuickAccessPopup]
+@="Show Quick Access Popup"
+"Icon"="C:\\Users\\web\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\QuickAccessPopup - Shortcut.lnk"
+
+[HKEY_CLASSES_ROOT\*\shell\ShowQuickAccessPopup\command]
+@="\"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\web\\Desktop\\QuickAccessPopup.ps1\""
+
+; Add "Show Quick Access Popup" to folders
+[HKEY_CLASSES_ROOT\Folder\shell\ShowQuickAccessPopup]
+@="Show Quick Access Popup"
+"Icon"="C:\\Users\\web\\AppData\\Roaming\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\QuickAccessPopup - Shortcut.lnk"
+
+[HKEY_CLASSES_ROOT\Folder\shell\ShowQuickAccessPopup\command]
+@="\"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -ExecutionPolicy Bypass -File \"C:\\Users\\web\\Desktop\\QuickAccessPopup.ps1\""
