@@ -1,1 +1,37 @@
 
+# Define the process name and shortcut path
+$processName = "QuickAccessPopup"
+$shortcutPath = "C:\Users\web\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\QuickAccessPopup - Shortcut.lnk"
+
+# Check if the process is running
+$process = Get-Process -Name $processName -ErrorAction SilentlyContinue
+
+if ($process) {
+    # If running, activate the window and send Ctrl+3 (keydown/keyup)
+    $hwnd = (Get-Process -Name $processName).MainWindowHandle
+    Add-Type -TypeDefinition @"
+    using System;
+    using System.Runtime.InteropServices;
+    public class Win32 {
+        [DllImport("user32.dll")]
+        public static extern bool SetForegroundWindow(IntPtr hWnd);
+        [DllImport("user32.dll")]
+        public static extern void keybd_event(byte bVk, byte bScan, uint dwFlags, UIntPtr dwExtraInfo);
+    }
+"@
+    [Win32]::SetForegroundWindow($hwnd)
+    Start-Sleep -Milliseconds 100  # Small delay to ensure window is active
+
+    # Simulate Ctrl down, 3 down, Ctrl up, 3 up
+    [Win32]::keybd_event(0x11, 0, 0, [UIntPtr]::Zero)  # Ctrl down
+    [Win32]::keybd_event(0x33, 0, 0, [UIntPtr]::Zero)  # 3 down
+    Start-Sleep -Milliseconds 50  # Small delay between key presses
+    [Win32]::keybd_event(0x11, 0, 0x0002, [UIntPtr]::Zero)  # Ctrl up
+    [Win32]::keybd_event(0x33, 0, 0x0002, [UIntPtr]::Zero)  # 3 up
+} else {
+    # If not running, launch the shortcut
+    Start-Process -FilePath $shortcutPath
+}
+
+# Exit the script
+exit
